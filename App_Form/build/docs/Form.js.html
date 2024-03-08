@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Form.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Form.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+
+
+const Form = () => {
+  const [lastname, setLastname] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [email, setEmail] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [city, setCity] = useState('');
+  const [zipcode, setZipcode] = useState('');
+
+  const [lastnameError, setLastnameError] = useState('');
+  const [firstnameError, setFirstnameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [birthdateError, setBirthdateError] = useState('');
+  const [cityError, setCityError] = useState('');
+  const [zipcodeError, setZipcodeError] = useState('');
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  /**
+   * Check if the last name is valid with a simple regular expression
+   * @param {any} e event object
+   * @returns {void}
+   */
+  const handleLastnameChange = (e) => {
+    const newLastname = e.target.value;
+
+    const isValidLastname = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/.test(newLastname);
+
+    setLastname(newLastname);
+
+    if (!isValidLastname) {
+        setLastnameError('Nom de famille non valide');
+    } else {
+        setLastnameError('');
+    }
+
+    let data = {lastname: e.target.value, firstname, email, birthdate, city, zipcode};
+
+    validateForm(data);
+  };
+
+  /**
+   * Check if the first name is valid with a simple regular expression
+   * @param {*} e event object
+   * @returns {void}
+   */
+  const handleFirstnameChange = (e) => {
+    const newFirstname = e.target.value;
+
+    const isValidFirstname = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/.test(newFirstname);
+
+    setFirstname(newFirstname);
+
+    if (!isValidFirstname) {
+        setFirstnameError('Prénom non valide');
+    } else {
+        setFirstnameError('');
+    }
+
+    let data = {lastname, firstname: e.target.value, email, birthdate, city, zipcode};
+
+    validateForm(data);
+  };
+
+  /**
+   * Check if the e-mail address is valid with a simple regular expression
+   * @param {*} e event object
+   * @returns {void}
+   */
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    // Checking e-mail address with a simple regular expression
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail);
+
+    setEmail(newEmail);
+
+    if (!isValidEmail) {
+      setEmailError('Adresse e-mail non valide');
+    } else {
+      setEmailError('');
+    }
+
+    let data = {lastname, firstname, email: newEmail, birthdate, city, zipcode};
+
+    validateForm(data);
+  };
+
+  /**
+   * Check if the birthdate is valid (age over 18)
+   * @param {*} e event object
+   * @returns {void}
+   */
+  const handleBirthdateChange = (e) => {
+    const newBirthdate = e.target.value;
+    // Age verification (over 18)
+    const today = new Date();
+    const birthDate = new Date(newBirthdate);
+    const age = today.getFullYear() - birthDate.getFullYear();
+
+    setBirthdate(newBirthdate);
+
+    if (age &lt; 18) {
+      setBirthdateError('L\'âge doit être supérieur à 18 ans');
+    } else {
+      setBirthdateError('');
+    }
+
+    let data = {lastname, firstname, email, birthdate: newBirthdate, city, zipcode};
+
+    validateForm(data);
+  };
+
+  /**
+   * Check if the city is valid with a simple regular expression
+   * @param {*} e event object
+   * @returns {void}
+   */
+  const handleCityChange = (e) => {
+    const newCity = e.target.value;
+
+    const isValidCity = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/.test(newCity);
+
+    setCity(newCity);
+
+    if (!isValidCity) {
+        setCityError('Ville non valide');
+    } else {
+        setCityError('');
+    }
+
+    let data = {lastname, firstname, email, birthdate, city: e.target.value, zipcode};
+
+    validateForm(data);
+  };
+
+  /**
+   * Check if the zip code is valid with a simple regular expression
+   * @param {*} e event object
+   * @returns {void}
+   */
+  const handleZipcodeChange = (e) => {
+    const newZipcode = e.target.value;
+    // Check zip code format (for France)
+    const isValidZipcode = /^\d{5}$/.test(newZipcode) &amp;&amp; newZipcode.length === 5;
+
+    setZipcode(newZipcode);
+
+    if (!isValidZipcode) {
+      setZipcodeError('Format de code postal invalide (France : XXXXX)');
+    } else {
+      setZipcodeError('');
+    }
+
+    let data = {lastname, firstname, email, birthdate, city, zipcode: newZipcode};
+
+    validateForm(data);
+  };
+
+  /**
+   * Validate the form with all fields
+   * @param {*} data list of fields
+   * @returns {boolean} form status
+   */
+  const validateForm = (data) => {
+    let {lastname, firstname, email, birthdate, city, zipcode} = data;
+    // Check all fields here
+    const isValidLastname = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/.test(lastname);
+    const isFirstnameValid = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/.test(firstname);
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const today = new Date();
+    const birthDate = new Date(birthdate);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const isBirthdateValid = age >= 18;
+    const isValidCity = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/.test(city);
+    const isZipcodeValid = /^\d{5}$/.test(zipcode) &amp;&amp; zipcode.length === 5;
+  
+    // Update error status
+    // setLastnameError(isValidLastname ? '' : 'Nom de famille non valide');
+    // setFirstnameError(isFirstnameValid ? '' : 'Prénom non valide');
+    // setEmailError(isEmailValid ? '' : 'Adresse e-mail non valide');
+    // setBirthdateError(isBirthdateValid ? '' : 'L\'âge doit être supérieur à 18 ans');
+    // setCityError(isValidCity ? '' : 'Ville non valide');
+    // setZipcodeError(isZipcodeValid ? '' : 'Format de code postal invalide (France : XXXXX)');
+  
+    // Check that all fields are valid
+    const formIsValid =
+      isEmailValid &amp;&amp; isBirthdateValid &amp;&amp; isZipcodeValid &amp;&amp; isValidLastname &amp;&amp; isFirstnameValid &amp;&amp; isValidCity;
+  
+    setIsFormValid(formIsValid);
+  
+    return formIsValid;
+  };
+
+  /**
+   * Check if the form is valid before submitting
+   * @param {*} e event object
+   * @returns {void}
+   */
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let data = {lastname, firstname, email, birthdate, city, zipcode};
+  
+    // Validate the form before submitting
+    validateForm(data);
+
+    // If form is invalid, do not submit data
+
+    window.localStorage.setItem('Lastname:', lastname);
+    window.localStorage.setItem('Firstname:', firstname);
+    window.localStorage.setItem('Email:', email);
+    window.localStorage.setItem('Birthdate:', birthdate);
+    window.localStorage.setItem('City:', city);
+    window.localStorage.setItem('Zipcode:', zipcode);
+    window.localStorage.setItem('Form status:', 'Le formulaire a été soumis avec succès');
+
+    setLastname('');
+    setFirstname('');
+    setEmail('');
+    setBirthdate('');
+    setCity('');
+    setZipcode('');
+    setIsFormValid(false);
+
+    window.alert('Le formulaire a été soumis avec succès');
+
+
+  };
+
+  return (
+    &lt;form data-testid="form" onSubmit={handleSubmit}>
+      &lt;div>
+        &lt;label>Lastname: &lt;/label>
+        &lt;input data-testid="lastname" type="text" value={lastname} onChange={handleLastnameChange} />
+        {lastnameError &amp;&amp; &lt;span data-testid="lastname-error" style={{ color: 'red' }}>{lastnameError}&lt;/span>}
+      &lt;/div>
+      &lt;div>
+        &lt;label>Prénom: &lt;/label>
+        &lt;input data-testid="firstname" type="text" value={firstname} onChange={handleFirstnameChange} />
+        {firstnameError &amp;&amp; &lt;span data-testid="firstname-error" style={{ color: 'red' }}>{firstnameError}&lt;/span>}
+      &lt;/div>
+      &lt;div>
+        &lt;label>Adresse e-mail: &lt;/label>
+        &lt;input data-testid="email" type="text" value={email} onChange={handleEmailChange} />
+        {emailError &amp;&amp; &lt;span data-testid="email-error" style={{ color: 'red' }}>{emailError}&lt;/span>}
+      &lt;/div>
+      &lt;div>
+        &lt;label>Date de naissance: &lt;/label>
+        &lt;input data-testid="birthdate" type="date" value={birthdate} onChange={handleBirthdateChange} />
+        {birthdateError &amp;&amp; &lt;span data-testid="birthdate-error" style={{ color: 'red' }}>{birthdateError}&lt;/span>}
+      &lt;/div>
+      &lt;div>
+        &lt;label>Ville: &lt;/label>
+        &lt;input data-testid="city" type="text" value={city} onChange={handleCityChange} />
+        {cityError &amp;&amp; &lt;span data-testid="city-error" style={{ color: 'red' }}>{cityError}&lt;/span>}
+      &lt;/div>
+      &lt;div>
+        &lt;label>Code postal: &lt;/label>
+        &lt;input data-testid="zipcode" type="number" value={zipcode} onChange={handleZipcodeChange} />
+        {zipcodeError &amp;&amp; &lt;span data-testid="zipcode-error" style={{ color: 'red' }}>{zipcodeError}&lt;/span>}
+      &lt;/div>
+      &lt;button data-testid="submit" type="submit" style={{ color: isFormValid ? 'green' : 'red' }} disabled={!isFormValid}>
+        Soumettre
+      &lt;/button>
+    &lt;/form>
+  );
+};
+
+export default Form;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Feb 16 2024 16:38:41 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

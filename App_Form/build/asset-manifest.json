@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/jest-form/static/css/main.8ae8c51a.css",
+    "main.js": "/jest-form/static/js/main.329ea1aa.js",
+    "static/js/453.d25b5a70.chunk.js": "/jest-form/static/js/453.d25b5a70.chunk.js",
+    "index.html": "/jest-form/index.html",
+    "main.8ae8c51a.css.map": "/jest-form/static/css/main.8ae8c51a.css.map",
+    "main.329ea1aa.js.map": "/jest-form/static/js/main.329ea1aa.js.map",
+    "453.d25b5a70.chunk.js.map": "/jest-form/static/js/453.d25b5a70.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8ae8c51a.css",
+    "static/js/main.329ea1aa.js"
+  ]
+}
