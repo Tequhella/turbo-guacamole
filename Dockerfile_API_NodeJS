@@ -1,0 +1,17 @@
+# Dockerfile for API NodeJS image
+FROM node:20
+
+RUN mkdir -p /API_NodeJS/node_modules && chown -R node:node /API_NodeJS
+
+WORKDIR /API_NodeJS
+
+COPY --chown=node:node /API_NodeJS/package.json ./
+COPY --chown=node:node /API_NodeJS/server.js ./
+
+USER node
+
+RUN npm install
+
+EXPOSE 5001
+
+CMD [ "node", "/API_NodeJS/server.js" ]

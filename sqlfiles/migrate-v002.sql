@@ -1,7 +1,7 @@
 USE user_form;
 
 CREATE TABLE users(
-    id INT PRIMARY KEY NOT Null,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     firstname VARCHAR(100),
     lastname VARCHAR(100),
     email VARCHAR(100),
@@ -11,8 +11,10 @@ CREATE TABLE users(
 );
 
 CREATE TABLE admins(
-    id INT PRIMARY KEY NOT Null,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     username VARCHAR(100),
     password VARCHAR(500),
     role VARCHAR(50)
 );
+
+INSERT INTO admins (username, password, role) VALUES ("root", "root", "admin");
