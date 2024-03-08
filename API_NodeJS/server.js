@@ -52,7 +52,7 @@ const root = {
   getUser: ({ id }) => UserModel.findById(id),
   getAllUsers: () => UserModel.find(),
   addUser: (args) => {
-    console.log(args);
+    //console.log(args);
     const { firstname, lastname, email, birthdate, city, zipcode } = args.user;
     const newUser = new UserModel({ firstname, lastname, email, birthdate, city, zipcode });
     return newUser.save();
@@ -76,21 +76,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-//app.all(
-//  "/graphql",
-//  createHandler({
-//    schema: schema,
-//    rootValue: root,
-//  })
-//)
-
 app.use('/graphql', graphqlHTTP({
   schema,
   rootValue: root,
-  graphiql: true, // Pour utiliser l'interface graphique GraphQL
+  graphiql: true,
 }));
 
-const PORT = 5000;
+const PORT = 5001;
 app.listen(PORT, () => {
   console.log(`Serveur GraphQL en cours d'exécution sur http://localhost:${PORT}/graphql`);
 });

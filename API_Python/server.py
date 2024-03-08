@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_graphql import GraphQLView
+from flask_cors import CORS
 from graphene import ObjectType, String, Schema, List, Field
 from pymongo import MongoClient
 from bson import ObjectId
 
 app = Flask(__name__)
+CORS(app)
 
 # Connection to MongoDB
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://root:root@localhost:27017/')
 db = client['user_form']
 users_collection = db['users']
 
@@ -22,14 +24,14 @@ class UserType(ObjectType):
     zipcode = String()
 
 # Query to find all users
-class Query(ObjectType):
+class getAllUsers(ObjectType):
     all_users = List(UserType)
 
     def resolve_all_users(self, info):
         return list(users_collection.find())
 
 # Mutation to add a user
-class CreateUser(ObjectType):
+class addUser(ObjectType):
     user = Field(UserType,
                  firstname=String(),
                  lastname=String(),
@@ -52,7 +54,7 @@ class CreateUser(ObjectType):
         return CreateUser(user=new_user)
 
 # Mutation to update a user
-class UpdateUser(ObjectType):
+class updateUser(ObjectType):
     user = Field(UserType,
                  _id=String(),
                  firstname=String(),
@@ -70,7 +72,7 @@ class UpdateUser(ObjectType):
         return UpdateUser(user=updated_user)
 
 # Mutation to delete a user
-class DeleteUser(ObjectType):
+class deleteUser(ObjectType):
     user = Field(UserType, _id=String())
 
     def mutate(self, info, _id):
@@ -78,7 +80,7 @@ class DeleteUser(ObjectType):
         return DeleteUser(user=deleted_user)
 
 # Creation of the global schema
-schema = Schema(query=Query, mutation=CreateUser)
+schema = Schema(query=getAllUsers, mutation=addUser)
 
 # GraphQL route configuration
 app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
