@@ -31,9 +31,13 @@ const App = () => {
       city: user.city,
       zipcode: user.zipcode,
     }};
+    
+    const headers = {
+      'Content-Type': 'application/json',
+    };
 
     try {
-      const data = await request('http://localhost:5000/graphql', query, variables);
+      const data = await request('http://localhost:4000/graphql', query, variables, headers);
       console.log('User ajouté:', data.addUser);
     } catch (error) {
       console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);

@@ -3,7 +3,6 @@ FROM node:20
 
 WORKDIR /App_Form
 
-
 ENV PATH /App_Form/node_modules/.bin:$PATH
 
 COPY ./App_Form/package.json ./

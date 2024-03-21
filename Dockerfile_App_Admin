@@ -1,0 +1,14 @@
+# Dockerfile for App Admin image
+FROM node:20
+
+WORKDIR /App_Admin
+
+ENV PATH /App_Admin/node_modules/.bin:$PATH
+
+COPY ./App_Admin/package.json ./
+COPY ./App_Admin/package-lock.json ./
+
+RUN npm install --silent
+RUN npm install react-scripts@5.0.1 -g --silent
+
+EXPOSE 3001

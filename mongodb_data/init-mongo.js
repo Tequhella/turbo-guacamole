@@ -8,7 +8,6 @@ db.createCollection('admins');
 
 // Add an admin in the collection admins
 db.admins.insert({
-  "_id": ObjectId(),  // Generates a new ObjectId for the _id field
   "username": "root",
   "password": "root",
   "role": "admin"

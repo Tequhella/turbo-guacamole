@@ -26,16 +26,25 @@ const schema = buildSchema(`
     city: String
     zipcode: String
   }
+  
+  type Admin {
+    _id: ID
+    username: String
+    password: String
+    role: String
+  }
 
   type Query {
-    getUser(id: ID!): User
+    getUser(_id: ID!): User
     getAllUsers: [User]
+    getAdmin(_id: ID!): Admin
+    getAllAdmins: [Admin]
   }
 
   type Mutation {
     addUser(user: _User): User
     updateUser(user: _User): User
-    deleteUser(id: ID!): User
+    deleteUser(id: ID!): ID
   }
 `);
 
@@ -48,17 +57,28 @@ const UserModel = mongoose.model('User', {
   zipcode: String,
 });
 
+const AdminModel = mongoose.model('Admin', {
+  username: String,
+  password: String,
+  role: String,
+});
+
 const root = {
-  getUser: ({ id }) => UserModel.findById(id),
+  getUser: ({ _id }) => UserModel.findById(_id),
   getAllUsers: () => UserModel.find(),
+  getAdmin: ({ _id }) => AdminModel.findById(_id),
+  getAllAdmins: () => AdminModel.find(),
   addUser: (args) => {
     //console.log(args);
     const { firstname, lastname, email, birthdate, city, zipcode } = args.user;
     const newUser = new UserModel({ firstname, lastname, email, birthdate, city, zipcode });
     return newUser.save();
   },
-  updateUser: ({ id, ...args }) => UserModel.findByIdAndUpdate(id, args, { new: true }),
-  deleteUser: ({ id }) => UserModel.findByIdAndRemove(id),
+  updateUser: ({ _id, ...args }) => UserModel.findByIdAndUpdate(_id, args, { new: true }),
+  deleteUser: async ({ id }) => {
+    await UserModel.findByIdAndDelete(id);
+    return id;
+  }
 };
 
 mongoose.connect("mongodb://root:root@localhost:27017/user_form", { useNewUrlParser: true, useUnifiedTopology: true, retryWrites: true, authSource: 'admin' });
@@ -70,7 +90,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
   optionsSuccessStatus: 200,
 };
 

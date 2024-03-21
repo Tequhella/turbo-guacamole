@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+
+  db_mongo:
+    image: mongo
+    container_name: db_mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./mongodb_data/:/docker-entrypoint-initdb.d/
+
+  db_mysql:
+     image: mysql
+     container_name: db_mysql
+     command: --default-authentication-plugin=mysql_native_password
+     restart: always
+     ports:
+       - 3306:3306
+     environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+     volumes:
+       - ./sqlfiles/:/docker-entrypoint-initdb.d/
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  api_nodejs:
+    image: api_nodejs
+    container_name: api_nodejs
+    restart: always
+    build: .
+    ports:
+      - 5001:5001
+    environment:
+      - MONGODB_HOST=db_mongo
+    depends_on:
+      - db_mongo
+
+  api_python:
+    image: api_python
+    container_name: api_python
+    restart: always
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      - MYSQL_HOST=db_mysql
+    depends_on:
+      - db_mysql
+
+  load_balancer:
+    image: lb_nodejs
+    container_name: load_balancer
+    restart: always
+    build: .
+    ports:
+      - 4000:4000
+    depends_on:
+      - api_nodejs
+      - api_python
+
+  app_form:
+    image: app_form
+    container_name: app_form
+    restart: always
+    build:
+      context: .
+      dockerfile: ./
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_SERVER_PORT=8000
+    volumes:
+      - ./App_Form/:/App_Form
+      - /App_Form/node_modules
+    depends_on:
+      - load_balancer
+    command: npm run start
+    
+  app_admin:
+    image: app_admin
+    container_name: app_admin
+    restart: always
+    build:
+      context: .
+      dockerfile: ./
+    ports:
+      - 3001:3001
+    environment:
+      - REACT_APP_SERVER_PORT=8001
+    volumes:
+      - ./App_Admin/:/App_Admin
+      - /App_Admin/node_modules
+    depends_on:
+      - api_nodejs
+      - api_python
+    command: npm run start

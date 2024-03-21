@@ -1,0 +1,17 @@
+# Dockerfile for Load Balancer image
+FROM node:20
+
+RUN mkdir -p /Load_Balancer/node_modules && chown -R node:node /Load_Balancer
+
+WORKDIR /Load_Balancer
+
+COPY --chown=node:node /Load_Balancer/package.json ./
+COPY --chown=node:node /Load_Balancer/lb.js ./
+
+USER node
+
+RUN npm install
+
+EXPOSE 4000
+
+CMD [ "node", "/Load_Balancer/lb.js" ]
