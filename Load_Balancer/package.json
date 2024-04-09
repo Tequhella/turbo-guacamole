@@ -5,6 +5,7 @@
     "fs": "^0.0.1-security",
     "http-proxy": "^1.18.1",
     "http-proxy-middleware": "^2.0.6",
+    "memory-cache": "^0.2.0",
     "node-fetch": "^2.7.0",
     "round-robin": "^1.0.0",
     "roundrobin": "^2.0.0"

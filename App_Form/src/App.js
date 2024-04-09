@@ -4,6 +4,7 @@ import { request, gql } from 'graphql-request';
 
 const App = () => {
   const addUser = async (user) => {
+  
   console.log(user);
     const query = gql`
       mutation addUser(

@@ -79,6 +79,7 @@ services:
       - 3000:3000
     environment:
       - REACT_APP_SERVER_PORT=8000
+      - REACT_APP_HTTP_PROXY
     volumes:
       - ./App_Form/:/App_Form
       - /App_Form/node_modules

@@ -16,11 +16,14 @@ const apiProxyPython = createProxyMiddleware('/graphql', {
 });
 
 app.use((req, res, next) => {
-  const useNodeJSApi = Math.random() < 0.5;
+  //const useNodeJSApi = Math.random() < 0.5;
   
-  if (useNodeJSApi) {
+  if (true) {
+    console.log("passe par node");
     apiProxyNode(req, res, next);
-  } else {
+  }
+  else {
+    console.log("passe par python");
     apiProxyPython(req, res, next);
   }
 });
