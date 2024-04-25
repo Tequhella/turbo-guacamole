@@ -1,17 +1,13 @@
 # Dockerfile for API Python image
-FROM python:3.9-slim-buster
+FROM python:3.10.12
 
 WORKDIR /API_Python
-
-# COPY ./API_Python/requirements.txt ./
-
-# RUN pip install --no-cache-dir -r requirements.txt
 
 RUN pip install --upgrade pip
 
 COPY ./API_Python ./
 
-RUN pip install --no-cache-dir flask flask-graphql==2.0.1 flask-cors graphql-core graphql-relay mysql-connector-python
+RUN pip install --no-cache-dir flask flask-graphql flask-cors graphql-core mysql-connector
 
 EXPOSE 5000
 

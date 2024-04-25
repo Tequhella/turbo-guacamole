@@ -32,3 +32,32 @@ services:
     restart: always
     ports:
       - 8080:8080
+      
+  api_nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile_API_NodeJS
+    container_name: api_nodejs
+    restart: always
+    ports:
+      - 5001:5001
+    environment:
+      MONGO_URI: mongodb://db_mongo:27017/user_form
+    depends_on:
+      - db_mongo
+
+  api_python:
+    build:
+      context: .
+      dockerfile: Dockerfile_API_Python
+    container_name: api_python
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      MYSQL_HOST: db_mysql
+      MYSQL_USER: ${MYSQL_ROOT_USER}
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DB: user_form
+    depends_on:
+      - db_mysql
