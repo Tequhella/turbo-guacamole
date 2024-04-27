@@ -1,9 +1,9 @@
 import React from 'react';
-import { useQuery, ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import UserList from './UserList';
 import clientMySQL from '../clientMySQL';
 import clientMongoDB from '../clientMongoDB';
-import { GET_USERS, DELETE_USER_MONGODB, DELETE_USER_MYSQL  } from '../queries/queriesUser';
+import { DELETE_USER_MONGODB, DELETE_USER_MYSQL  } from '../queries/queriesUser';
 
 const Dashboard = () => {
   return (

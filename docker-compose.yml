@@ -45,7 +45,7 @@ services:
       MONGO_URI: mongodb://db_mongo:27017/user_form
     depends_on:
       - db_mongo
-
+      
   api_python:
     build:
       context: .
@@ -61,3 +61,54 @@ services:
       MYSQL_DB: user_form
     depends_on:
       - db_mysql
+      
+  load_balancer:
+    build:
+      context: .
+      dockerfile: Dockerfile_Nginx
+    container_name: load_balancer
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./nginx:/etc/nginx
+    restart: always
+    depends_on:
+      - api_nodejs
+      - api_python
+      
+  app_form:
+    image: app_form
+    container_name: app_form
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile_App_Form
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_SERVER_PORT=8000
+    volumes:
+      - ./App_Form/:/App_Form
+      - /App_Form/node_modules
+    depends_on:
+      - load_balancer
+    command: npm run start
+    
+  app_admin:
+    image: app_admin
+    container_name: app_admin
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile_App_Admin
+    ports:
+      - 3001:3001
+    environment:
+      - REACT_APP_SERVER_PORT=8000
+    volumes:
+      - ./App_Admin/:/App_Admin
+      - /App_Admin/node_modules
+    depends_on:
+      - api_nodejs
+      - api_python
+    command: npm run start

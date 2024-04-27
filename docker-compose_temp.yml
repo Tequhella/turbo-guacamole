@@ -79,7 +79,6 @@ services:
       - 3000:3000
     environment:
       - REACT_APP_SERVER_PORT=8000
-      - REACT_APP_HTTP_PROXY
     volumes:
       - ./App_Form/:/App_Form
       - /App_Form/node_modules
@@ -104,4 +103,63 @@ services:
     depends_on:
       - api_nodejs
       - api_python
+    command: npm run start
+    
+    
+  api_nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile_API_NodeJS
+    container_name: api_nodejs
+    restart: always
+    ports:
+      - 5001:5001
+    environment:
+      MONGO_URI: mongodb://db_mongo:27017/user_form
+    depends_on:
+      - db_mongo
+
+  api_python:
+    build:
+      context: .
+      dockerfile: Dockerfile_API_Python
+    container_name: api_python
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      MYSQL_HOST: db_mysql
+      MYSQL_USER: ${MYSQL_ROOT_USER}
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DB: user_form
+    depends_on:
+      - db_mysql
+      
+  load_balancer:
+    build:
+      context: .
+      dockerfile: Dockerfile_Nginx
+    container_name: load_balancer
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./nginx:/etc/nginx
+    restart: always
+    
+  app_form:
+    image: app_form
+    container_name: app_form
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile_App_Form
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_SERVER_PORT=8000
+    volumes:
+      - ./App_Form/:/App_Form
+      - /App_Form/node_modules
+    depends_on:
+      - load_balancer
     command: npm run start

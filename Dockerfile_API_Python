@@ -9,6 +9,8 @@ COPY ./API_Python ./
 
 RUN pip install --no-cache-dir flask flask-graphql flask-cors graphql-core mysql-connector
 
+ENV FLASK_APP=server.py
+
 EXPOSE 5000
 
-CMD [ "python3", "/API_Python/server.py" ]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]

@@ -38,7 +38,7 @@ const App = () => {
     };
 
     try {
-      const data = await request('http://localhost:4000/graphql', query, variables, headers);
+      const data = await request('http://load_balancer:4000/graphql', query, variables, headers);
       console.log('User ajouté:', data.addUser);
     } catch (error) {
       console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);

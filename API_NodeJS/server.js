@@ -81,7 +81,7 @@ const root = {
   }
 };
 
-mongoose.connect("mongodb://root:root@localhost:27017/user_form", { useNewUrlParser: true, useUnifiedTopology: true, retryWrites: true, authSource: 'admin' });
+mongoose.connect("mongodb://root:root@db_mongo:27017/user_form", { useNewUrlParser: true, useUnifiedTopology: true, retryWrites: true, authSource: 'admin' });
 
 const app = express();
 
@@ -90,7 +90,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: ['http://app_form:3000', 'http://app_admin:3001'],
   optionsSuccessStatus: 200,
 };
 

@@ -1,9 +1,7 @@
 import React from 'react';
 import './App.css';
-import UserList from './components/UserList';
 import { ApolloProvider } from '@apollo/client';
 import clientMySQL from './clientMySQL';
-import clientMongoDB from './clientMongoDB';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import Dashboard from './components/Dashboard';

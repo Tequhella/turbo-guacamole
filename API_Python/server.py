@@ -17,7 +17,7 @@ from graphql.execution.executors.asyncio import AsyncioExecutor
 import mysql.connector
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "http://localhost:3001"], supports_credentials=True)
+CORS(app, origins=["http://app_form:3000", "http://app_admin:3001"], supports_credentials=True)
 
 user_type = GraphQLObjectType(
     name="User",
@@ -57,7 +57,7 @@ admin_type = GraphQLObjectType(
 def resolve_get_user(_, info, _id):
     # Ouvrir une connexion
     db = mysql.connector.connect(
-      host="localhost",
+      host="db_mysql",
       user="root",
       password="root",
       database="user_form"
@@ -85,7 +85,7 @@ def resolve_get_user(_, info, _id):
 def resolve_get_all_users(_, info):
     # Ouvrir une connexion
     db = mysql.connector.connect(
-      host="localhost",
+      host="db_mysql",
       user="root",
       password="root",
       database="user_form"
@@ -112,7 +112,7 @@ def resolve_get_all_users(_, info):
 def resolve_get_admin(_, info, _id):
     # Ouvrir une connexion
     db = mysql.connector.connect(
-      host="localhost",
+      host="db_mysql",
       user="root",
       password="root",
       database="user_form"
@@ -140,7 +140,7 @@ def resolve_get_admin(_, info, _id):
 def resolve_get_all_admins(_, info):
     # Ouvrir une connexion
     db = mysql.connector.connect(
-      host="localhost",
+      host="db_mysql",
       user="root",
       password="root",
       database="user_form"
@@ -167,7 +167,7 @@ def resolve_get_all_admins(_, info):
 def resolve_add_user(_, info, user):
     # Ouvrir une connexion
     db = mysql.connector.connect(
-      host="localhost",
+      host="db_mysql",
       user="root",
       password="root",
       database="user_form"
@@ -204,7 +204,7 @@ def resolve_add_user(_, info, user):
 def resolve_update_user(_, info, id, user):
     # Ouvrir une connexion
     db = mysql.connector.connect(
-      host="localhost",
+      host="db_mysql",
       user="root",
       password="root",
       database="user_form"
@@ -236,7 +236,7 @@ def resolve_update_user(_, info, id, user):
 def resolve_delete_user(_, info, _id):
     # Ouvrir une connexion
     db = mysql.connector.connect(
-      host="localhost",
+      host="db_mysql",
       user="root",
       password="root",
       database="user_form"

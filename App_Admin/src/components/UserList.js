@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_USERS, DELETE_USER_MONGODB, DELETE_USER_MYSQL  } from '../queries/queriesUser';
+import { GET_USERS } from '../queries/queriesUser';
 
 const UserList = (props) => {
   const { loading, error, data } = useQuery(GET_USERS, {
